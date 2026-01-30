@@ -1,4 +1,5 @@
 import { useCRM } from '@/contexts/CRMContext';
+import logo from '@/assets/logo.png';
 
 interface SidebarProps {
   activeTab: string;
@@ -15,14 +16,12 @@ const tabs = [
 ];
 
 export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
-  const { state, filters, setFilters, clearFilters } = useCRM();
+  const { state, filters, setFilters } = useCRM();
 
   return (
     <aside className="hidden md:flex flex-col w-[260px] border-r border-border bg-gradient-to-b from-[rgba(17,17,20,0.98)] to-[rgba(11,11,12,0.98)] h-screen sticky top-0 overflow-auto p-4">
       <div className="flex justify-center items-center pb-5 border-b border-border mb-5">
-        <h1 className="text-lg font-extrabold uppercase tracking-wide text-primary text-center leading-relaxed" style={{ textShadow: '0 2px 10px rgba(200,162,74,0.3)' }}>
-          CRM Agência<br />ND Digital
-        </h1>
+        <img src={logo} alt="ND Digital" className="h-16 w-auto object-contain" />
       </div>
 
       <nav className="flex flex-col gap-2 mb-5">
