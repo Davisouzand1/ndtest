@@ -9,6 +9,7 @@ interface Filters {
   service: string;
   pipeline: string;
   month: string;
+  period: string; // '7', '14', '30' or ''
 }
 
 interface CRMContextType {
@@ -62,6 +63,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     service: '',
     pipeline: '',
     month: '',
+    period: '',
   });
 
   useEffect(() => {
@@ -69,7 +71,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
   }, [state]);
 
   const clearFilters = useCallback(() => {
-    setFilters({ search: '', owner: '', source: '', service: '', pipeline: '', month: '' });
+    setFilters({ search: '', owner: '', source: '', service: '', pipeline: '', month: '', period: '' });
   }, []);
 
   // Lead actions
