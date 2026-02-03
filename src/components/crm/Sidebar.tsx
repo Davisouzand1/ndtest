@@ -15,8 +15,27 @@ const tabs = [
   { id: 'config', icon: '⚙️', label: 'Configurações' },
 ];
 
+const periodOptions = [
+  { value: '7', label: '7d' },
+  { value: '14', label: '14d' },
+  { value: '30', label: '30d' },
+];
+
 export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   const { state, filters, setFilters } = useCRM();
+
+  const handlePeriodClick = (days: string) => {
+    // Toggle: if already selected, deselect it
+    if (filters.period === days) {
+      setFilters(f => ({ ...f, period: '', month: '' }));
+    } else {
+      setFilters(f => ({ ...f, period: days, month: '' }));
+    }
+  };
+
+  const handleMonthChange = (month: string) => {
+    setFilters(f => ({ ...f, month, period: '' }));
+  };
 
   return (
     <aside className="hidden md:flex flex-col w-[260px] border-r border-border bg-gradient-to-b from-[rgba(17,17,20,0.98)] to-[rgba(11,11,12,0.98)] h-screen sticky top-0 overflow-auto p-4">
@@ -91,12 +110,29 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           {state.pipelines.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
 
-        <label className="text-[11px] text-muted-foreground mb-1 block">Período</label>
+        <label className="text-[11px] text-primary font-semibold uppercase tracking-wide mb-2 block">Período</label>
+        <div className="flex gap-2 mb-2">
+          {periodOptions.map(opt => (
+            <button
+              key={opt.value}
+              onClick={() => handlePeriodClick(opt.value)}
+              className={`flex-1 py-1.5 px-2 text-xs font-medium rounded-lg border transition-all ${
+                filters.period === opt.value
+                  ? 'bg-primary/25 border-primary text-primary'
+                  : 'bg-white/5 border-border text-muted-foreground hover:bg-white/10 hover:text-foreground'
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        
+        <label className="text-[11px] text-muted-foreground mb-1 block">Ou selecione mês</label>
         <input
           type="month"
           className="input-crm"
           value={filters.month}
-          onChange={e => setFilters(f => ({ ...f, month: e.target.value }))}
+          onChange={e => handleMonthChange(e.target.value)}
         />
       </div>
     </aside>
