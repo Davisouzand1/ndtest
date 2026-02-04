@@ -38,22 +38,22 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   };
 
   return (
-    <aside className="hidden md:flex flex-col w-[260px] border-r border-border bg-gradient-to-b from-[rgba(17,17,20,0.98)] to-[rgba(11,11,12,0.98)] h-screen sticky top-0 overflow-auto p-4">
-      <div className="flex justify-center items-center pb-5 border-b border-border mb-5">
-        <img src={logo} alt="ND Digital" className="h-16 w-auto object-contain" />
+    <aside className="hidden md:flex sidebar-modern w-[270px]">
+      <div className="flex justify-center items-center pb-6 border-b border-border/40 mb-6">
+        <img src={logo} alt="ND Digital" className="h-16 w-auto object-contain drop-shadow-lg" />
       </div>
 
-      <nav className="flex flex-col gap-2 mb-5">
+      <nav className="flex flex-col gap-1.5 mb-6">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={`nav-button ${activeTab === tab.id ? 'active' : ''}`}
           >
-            <span>{tab.icon}</span>
+            <span className="text-lg">{tab.icon}</span>
             <span>{tab.label}</span>
             {tab.showCount && (
-              <span className="ml-auto text-xs text-primary border border-primary/45 px-1.5 py-0.5 rounded-full bg-primary/10">
+              <span className="ml-auto text-[11px] text-primary border border-primary/40 px-2 py-0.5 rounded-full bg-gradient-to-r from-primary/15 to-primary/5 font-semibold">
                 {state.leads.length}
               </span>
             )}
@@ -61,18 +61,21 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
         ))}
       </nav>
 
-      <div className="bg-primary/5 border border-primary/20 p-3 rounded-xl mt-4">
-        <div className="text-xs text-muted-foreground mb-2">🔎 Filtros globais</div>
+      <div className="filter-panel">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+          <span className="text-base">🔎</span>
+          <span className="font-medium uppercase tracking-wider">Filtros globais</span>
+        </div>
         <input
-          className="input-crm mb-2"
+          className="input-crm mb-3"
           placeholder="Buscar: nome, empresa..."
           value={filters.search}
           onChange={e => setFilters(f => ({ ...f, search: e.target.value }))}
         />
 
-        <label className="text-[11px] text-primary font-semibold uppercase tracking-wide mb-1 block">Vendedor</label>
+        <label className="text-[11px] text-primary font-semibold uppercase tracking-wider mb-1.5 block">Vendedor</label>
         <select
-          className="input-crm mb-2"
+          className="input-crm mb-3"
           value={filters.owner}
           onChange={e => setFilters(f => ({ ...f, owner: e.target.value }))}
         >
@@ -80,9 +83,9 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           {state.config.owners.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
 
-        <label className="text-[11px] text-primary font-semibold uppercase tracking-wide mb-1 block">Origem</label>
+        <label className="text-[11px] text-primary font-semibold uppercase tracking-wider mb-1.5 block">Origem</label>
         <select
-          className="input-crm mb-2"
+          className="input-crm mb-3"
           value={filters.source}
           onChange={e => setFilters(f => ({ ...f, source: e.target.value }))}
         >
@@ -90,9 +93,9 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           {state.config.sources.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
 
-        <label className="text-[11px] text-primary font-semibold uppercase tracking-wide mb-1 block">Serviços</label>
+        <label className="text-[11px] text-primary font-semibold uppercase tracking-wider mb-1.5 block">Serviços</label>
         <select
-          className="input-crm mb-2"
+          className="input-crm mb-3"
           value={filters.service}
           onChange={e => setFilters(f => ({ ...f, service: e.target.value }))}
         >
@@ -100,9 +103,9 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           {state.config.services.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
 
-        <label className="text-[11px] text-primary font-semibold uppercase tracking-wide mb-1 block">Funil</label>
+        <label className="text-[11px] text-primary font-semibold uppercase tracking-wider mb-1.5 block">Funil</label>
         <select
-          className="input-crm mb-3"
+          className="input-crm mb-4"
           value={filters.pipeline}
           onChange={e => setFilters(f => ({ ...f, pipeline: e.target.value }))}
         >
@@ -110,16 +113,16 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           {state.pipelines.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
 
-        <label className="text-[11px] text-primary font-semibold uppercase tracking-wide mb-2 block">Período</label>
-        <div className="flex gap-2 mb-2">
+        <label className="text-[11px] text-primary font-semibold uppercase tracking-wider mb-2 block">Período</label>
+        <div className="flex gap-2 mb-3">
           {periodOptions.map(opt => (
             <button
               key={opt.value}
               onClick={() => handlePeriodClick(opt.value)}
-              className={`flex-1 py-1.5 px-2 text-xs font-medium rounded-lg border transition-all ${
+              className={`flex-1 py-2 px-2.5 text-xs font-semibold rounded-xl border transition-all duration-200 ${
                 filters.period === opt.value
-                  ? 'bg-primary/25 border-primary text-primary'
-                  : 'bg-white/5 border-border text-muted-foreground hover:bg-white/10 hover:text-foreground'
+                  ? 'bg-gradient-to-r from-primary/25 to-primary/15 border-primary text-primary shadow-sm'
+                  : 'bg-white/5 border-border/60 text-muted-foreground hover:bg-white/10 hover:text-foreground hover:border-border'
               }`}
             >
               {opt.label}
@@ -127,7 +130,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           ))}
         </div>
         
-        <label className="text-[11px] text-muted-foreground mb-1 block">Ou selecione mês</label>
+        <label className="text-[11px] text-muted-foreground mb-1.5 block">Ou selecione mês</label>
         <input
           type="month"
           className="input-crm"

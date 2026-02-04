@@ -133,9 +133,9 @@ export function LeadModal({ open, onOpenChange, leadId }: LeadModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-popover border-border max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{leadId ? 'Editar Lead' : 'Novo Lead'}</DialogTitle>
+      <DialogContent className="bg-gradient-to-br from-popover to-popover/95 border-border/60 max-w-4xl max-h-[90vh] overflow-y-auto backdrop-blur-xl rounded-2xl shadow-2xl">
+        <DialogHeader className="border-b border-border/40 pb-4">
+          <DialogTitle className="text-xl font-bold">{leadId ? '✏️ Editar Lead' : '✨ Novo Lead'}</DialogTitle>
         </DialogHeader>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 py-4">
@@ -329,13 +329,13 @@ export function LeadModal({ open, onOpenChange, leadId }: LeadModalProps) {
           </div>
         </div>
 
-        <DialogFooter className="gap-2">
+        <DialogFooter className="gap-3 pt-4 border-t border-border/40">
           {leadId && (
-            <button onClick={handleDelete} className="px-4 py-2 rounded-lg bg-destructive/15 text-destructive border border-destructive/30 text-sm font-semibold">
-              Excluir
+            <button onClick={handleDelete} className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-destructive/20 to-destructive/10 text-destructive border border-destructive/30 text-sm font-semibold hover:from-destructive/30 hover:to-destructive/20 transition-all duration-200">
+              🗑️ Excluir
             </button>
           )}
-          <button onClick={handleSave} className="btn-gold">Salvar</button>
+          <button onClick={handleSave} className="btn-gold">💾 Salvar</button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

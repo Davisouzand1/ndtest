@@ -35,21 +35,23 @@ function CRMApp() {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen w-full">
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <main className="flex-1 p-5 overflow-auto">
+      <main className="flex-1 p-6 overflow-auto">
         <Topbar
           title={tabTitles[activeTab] || 'CRM'}
           onNewLead={openNewLead}
         />
 
-        {activeTab === 'kanban' && <KanbanView onEditLead={openEditLead} />}
-        {activeTab === 'tasks' && <TasksView />}
-        {activeTab === 'financial' && <FinancialView />}
-        {activeTab === 'contracts' && <ContractsView />}
-        {activeTab === 'reports' && <ReportsView />}
-        {activeTab === 'config' && <ConfigView />}
+        <div className="animate-fade-in">
+          {activeTab === 'kanban' && <KanbanView onEditLead={openEditLead} />}
+          {activeTab === 'tasks' && <TasksView />}
+          {activeTab === 'financial' && <FinancialView />}
+          {activeTab === 'contracts' && <ContractsView />}
+          {activeTab === 'reports' && <ReportsView />}
+          {activeTab === 'config' && <ConfigView />}
+        </div>
 
         <LeadModal
           open={leadModalOpen}
@@ -59,13 +61,27 @@ function CRMApp() {
       </main>
 
       {/* Mobile Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border p-2 flex justify-around z-50">
-        <button onClick={() => setActiveTab('kanban')} className={`p-2 rounded-lg ${activeTab === 'kanban' ? 'text-primary' : 'text-muted-foreground'}`}>📌</button>
-        <button onClick={() => setActiveTab('tasks')} className={`p-2 rounded-lg ${activeTab === 'tasks' ? 'text-primary' : 'text-muted-foreground'}`}>✅</button>
-        <button onClick={() => setActiveTab('financial')} className={`p-2 rounded-lg ${activeTab === 'financial' ? 'text-primary' : 'text-muted-foreground'}`}>💰</button>
-        <button onClick={() => setActiveTab('contracts')} className={`p-2 rounded-lg ${activeTab === 'contracts' ? 'text-primary' : 'text-muted-foreground'}`}>📜</button>
-        <button onClick={() => setActiveTab('reports')} className={`p-2 rounded-lg ${activeTab === 'reports' ? 'text-primary' : 'text-muted-foreground'}`}>📊</button>
-        <button onClick={() => setActiveTab('config')} className={`p-2 rounded-lg ${activeTab === 'config' ? 'text-primary' : 'text-muted-foreground'}`}>⚙️</button>
+      <nav className="mobile-nav md:hidden">
+        {[
+          { id: 'kanban', icon: '📌' },
+          { id: 'tasks', icon: '✅' },
+          { id: 'financial', icon: '💰' },
+          { id: 'contracts', icon: '📜' },
+          { id: 'reports', icon: '📊' },
+          { id: 'config', icon: '⚙️' },
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`p-2.5 rounded-xl text-lg transition-all duration-200 ${
+              activeTab === tab.id 
+                ? 'text-primary bg-primary/10 scale-110' 
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {tab.icon}
+          </button>
+        ))}
       </nav>
     </div>
   );
