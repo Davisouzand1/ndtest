@@ -75,52 +75,67 @@ export function KanbanView({ onEditLead }: KanbanViewProps) {
   return (
     <div className="animate-fade-in">
       {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
-        <div className="bg-card border border-border rounded-xl p-4">
-          <div className="text-xs font-bold text-primary uppercase border-b border-border pb-2 mb-3">📊 Volume</div>
-          <div className="flex justify-between text-sm mb-1">
-            <span className="text-muted-foreground">Ativos</span>
-            <b>{kpis.active}</b>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+        <div className="kpi-card gold">
+          <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase border-b border-border/40 pb-3 mb-4">
+            <span className="text-base">📊</span>
+            <span className="tracking-wider">Volume</span>
           </div>
-          <div className="flex justify-between text-sm mb-1">
-            <span className="text-muted-foreground">Negociação</span>
-            <b>{kpis.inProgress}</b>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Fechados</span>
-            <b className="text-success">{kpis.won}</b>
-          </div>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-4">
-          <div className="text-xs font-bold text-primary uppercase border-b border-border pb-2 mb-3">💰 Receita</div>
-          <div className="flex justify-between text-sm mb-1">
-            <span className="text-muted-foreground">Pipeline</span>
-            <b className="text-primary">{fmtBRL(kpis.pipeMRR)}</b>
-          </div>
-          <div className="flex justify-between text-sm mb-1">
-            <span className="text-muted-foreground">Fechado</span>
-            <b className="text-success">{fmtBRL(kpis.wonMRR)}</b>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Ticket Médio</span>
-            <b>{fmtBRL(kpis.avgTicket)}</b>
+          <div className="space-y-2.5">
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Ativos</span>
+              <b className="text-lg">{kpis.active}</b>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Negociação</span>
+              <b className="text-lg">{kpis.inProgress}</b>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Fechados</span>
+              <b className="text-lg text-success">{kpis.won}</b>
+            </div>
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-4">
-          <div className="text-xs font-bold text-primary uppercase border-b border-border pb-2 mb-3">🎯 Conversão</div>
-          <div className="flex justify-between text-sm mb-1">
-            <span className="text-muted-foreground">Taxa Geral</span>
-            <b>{kpis.convRate}%</b>
+        <div className="kpi-card success">
+          <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase border-b border-border/40 pb-3 mb-4">
+            <span className="text-base">💰</span>
+            <span className="tracking-wider">Receita</span>
           </div>
-          <div className="flex justify-between text-sm mb-1">
-            <span className="text-muted-foreground">Win Rate</span>
-            <b>{kpis.winRate}%</b>
+          <div className="space-y-2.5">
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Pipeline</span>
+              <b className="text-lg text-primary">{fmtBRL(kpis.pipeMRR)}</b>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Fechado</span>
+              <b className="text-lg text-success">{fmtBRL(kpis.wonMRR)}</b>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Ticket Médio</span>
+              <b className="text-lg">{fmtBRL(kpis.avgTicket)}</b>
+            </div>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Indicações</span>
-            <b>{kpis.refConv}%</b>
+        </div>
+
+        <div className="kpi-card">
+          <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase border-b border-border/40 pb-3 mb-4">
+            <span className="text-base">🎯</span>
+            <span className="tracking-wider">Conversão</span>
+          </div>
+          <div className="space-y-2.5">
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Taxa Geral</span>
+              <b className="text-lg">{kpis.convRate}%</b>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Win Rate</span>
+              <b className="text-lg">{kpis.winRate}%</b>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Indicações</span>
+              <b className="text-lg">{kpis.refConv}%</b>
+            </div>
           </div>
         </div>
       </div>
@@ -132,17 +147,20 @@ export function KanbanView({ onEditLead }: KanbanViewProps) {
           const stageSum = stageLeads.reduce((a, b) => a + (Number(b.mrr) || 0), 0);
 
           return (
-            <div key={stage} className="min-w-[280px] w-[280px] border border-border rounded-[18px] bg-card panel-shadow flex flex-col">
-              <div className="flex items-center justify-between gap-2 p-3.5 border-b border-border sticky top-0 bg-card rounded-t-[18px] z-[3]">
+            <div key={stage} className="min-w-[290px] w-[290px] kanban-column">
+              <div className="kanban-header">
                 <div>
-                  <strong className="text-sm">{stage}</strong>
-                  <div className="text-[11px] text-success font-bold mt-0.5">{fmtBRL(stageSum)}</div>
+                  <strong className="text-sm font-semibold">{stage}</strong>
+                  <div className="text-[11px] text-success font-bold mt-1 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                    {fmtBRL(stageSum)}
+                  </div>
                 </div>
-                <span className="text-sm text-muted-foreground">{stageLeads.length}</span>
+                <span className="text-sm text-muted-foreground bg-white/5 px-2 py-0.5 rounded-lg">{stageLeads.length}</span>
               </div>
 
               <div
-                className="p-2.5 flex flex-col gap-2.5 min-h-[120px] flex-1"
+                className="p-3 flex flex-col gap-3 min-h-[140px] flex-1"
                 onDrop={e => handleDrop(e, stage)}
                 onDragOver={handleDragOver}
               >
@@ -169,34 +187,37 @@ function LeadCard({ lead, onDragStart, onClick }: LeadCardProps) {
 
   return (
     <div
-      className="crm-card"
+      className="crm-card group"
       draggable
       onDragStart={e => onDragStart(e, lead.id)}
       onClick={onClick}
     >
       <div className="flex justify-between items-start gap-2">
-        <strong className="text-sm">{lead.name}</strong>
-        <span className="text-[10px] text-muted-foreground border border-border px-1.5 py-0.5 rounded">{lead.source}</span>
+        <strong className="text-sm font-semibold group-hover:text-primary transition-colors">{lead.name}</strong>
+        <span className="text-[10px] text-muted-foreground border border-border/50 bg-white/5 px-2 py-0.5 rounded-lg">{lead.source}</span>
       </div>
-      <div className="mt-2 grid gap-1 text-xs text-muted-foreground">
-        {lead.company && <div>{lead.company}</div>}
-        {lead.contact && <div>{lead.contact}</div>}
-        <div>Vendedor: <b className="text-foreground font-medium">{lead.owner || '-'}</b></div>
+      <div className="mt-2.5 grid gap-1.5 text-xs text-muted-foreground">
+        {lead.company && <div className="flex items-center gap-1.5"><span className="text-[10px]">🏢</span> {lead.company}</div>}
+        {lead.contact && <div className="flex items-center gap-1.5"><span className="text-[10px]">📞</span> {lead.contact}</div>}
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px]">👤</span>
+          Vendedor: <b className="text-foreground font-medium">{lead.owner || '-'}</b>
+        </div>
       </div>
-      <div className="mt-2.5 flex gap-1.5 flex-wrap">
+      <div className="mt-3 flex gap-2 flex-wrap">
         {waLink && (
           <a
             href={waLink}
             target="_blank"
             rel="noopener noreferrer"
             onClick={e => e.stopPropagation()}
-            className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition-all"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg bg-gradient-to-r from-emerald-500/20 to-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:from-emerald-500/30 hover:to-emerald-500/20 transition-all duration-200"
           >
             📱 WhatsApp
           </a>
         )}
         {lead.mrr > 0 && (
-          <span className="badge-success text-[10px] px-2 py-0.5 rounded-full border">{fmtBRL(lead.mrr)}</span>
+          <span className="badge-success text-[10px] px-2.5 py-1 rounded-lg border font-semibold">{fmtBRL(lead.mrr)}</span>
         )}
       </div>
     </div>

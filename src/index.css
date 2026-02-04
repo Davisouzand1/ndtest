@@ -170,11 +170,26 @@
   }
   
   .gold-glow {
-    box-shadow: 0 4px 15px hsl(var(--gold) / 0.2);
+    box-shadow: 0 0 20px hsl(var(--gold) / 0.15), 0 0 40px hsl(var(--gold) / 0.08);
   }
   
   .panel-shadow {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 10px 30px -5px rgba(0, 0, 0, 0.25),
+      0 0 0 1px hsl(var(--border) / 0.5);
+  }
+
+  .glass {
+    background: hsl(var(--card) / 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-subtle {
+    background: hsl(var(--card) / 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   
   .drag-over {
@@ -196,73 +211,165 @@
     background: hsl(var(--muted));
     border-radius: 3px;
   }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  .glow-sm {
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.2);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 15px hsl(var(--success) / 0.3);
+  }
 }
 
 @layer components {
   .nav-button {
-    @apply flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-muted-foreground text-sm font-medium transition-all cursor-pointer;
+    @apply flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-muted-foreground text-sm font-medium transition-all duration-200 cursor-pointer;
   }
   
   .nav-button:hover {
-    @apply bg-white/[0.03] text-foreground;
+    @apply bg-white/[0.06] text-foreground translate-x-0.5;
   }
   
   .nav-button.active {
-    @apply bg-primary/10 text-primary border border-primary/20;
+    @apply bg-gradient-to-r from-primary/15 to-primary/5 text-primary border border-primary/25 shadow-[inset_0_1px_0_0_hsl(var(--gold)/0.1)];
   }
   
   .crm-card {
-    @apply border border-border bg-white/[0.03] rounded-[14px] p-3 cursor-grab transition-all;
+    @apply border border-border/60 bg-gradient-to-br from-white/[0.04] to-white/[0.01] rounded-2xl p-3.5 cursor-grab transition-all duration-200;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   }
   
   .crm-card:hover {
-    @apply -translate-y-0.5 border-primary/45 bg-white/[0.05];
+    @apply -translate-y-1 border-primary/40 shadow-lg;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 0 1px hsl(var(--primary) / 0.15);
   }
   
   .crm-card:active {
-    @apply cursor-grabbing;
+    @apply cursor-grabbing scale-[0.98];
   }
   
   .badge-gold {
-    @apply border-primary/45 text-primary bg-primary/10;
+    @apply border-primary/45 text-primary bg-gradient-to-r from-primary/15 to-primary/5;
   }
   
   .badge-success {
-    @apply border-emerald-500/35 text-emerald-400 bg-emerald-500/10;
+    @apply border-success/35 text-success bg-gradient-to-r from-success/15 to-success/5;
   }
   
   .input-crm {
-    @apply w-full bg-[#1a1a20] text-foreground border border-border rounded-lg px-3 py-2.5 outline-none text-sm;
+    @apply w-full bg-background/60 text-foreground border border-border/70 rounded-xl px-3.5 py-2.5 outline-none text-sm transition-all duration-200;
+    backdrop-filter: blur(4px);
   }
   
   .input-crm:focus {
-    @apply border-primary ring-2 ring-primary/10;
+    @apply border-primary/60 ring-2 ring-primary/15 bg-background/80;
+  }
+
+  .input-crm:hover:not(:focus) {
+    @apply border-border bg-background/70;
   }
   
   .btn-gold {
-    @apply gold-gradient gold-glow text-background font-semibold px-4 py-2.5 rounded-[10px] transition-all;
+    @apply relative overflow-hidden gold-gradient text-background font-semibold px-5 py-2.5 rounded-xl transition-all duration-200;
+    box-shadow: 0 4px 15px hsl(var(--gold) / 0.25), inset 0 1px 0 hsl(var(--gold-light) / 0.3);
   }
   
   .btn-gold:hover {
     @apply -translate-y-0.5 brightness-110;
+    box-shadow: 0 6px 20px hsl(var(--gold) / 0.35), inset 0 1px 0 hsl(var(--gold-light) / 0.3);
+  }
+
+  .btn-gold:active {
+    @apply translate-y-0 brightness-95;
   }
   
   .kpi-card {
-    @apply bg-card border border-border rounded-2xl p-5 relative overflow-hidden;
+    @apply bg-gradient-to-br from-card to-card/80 border border-border/60 rounded-2xl p-5 relative overflow-hidden transition-all duration-200;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .kpi-card:hover {
+    @apply border-border;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
   }
   
   .kpi-card::before {
     content: '';
-    @apply absolute top-0 left-0 w-1 h-full bg-border;
+    @apply absolute top-0 left-0 w-1 h-full rounded-l-2xl;
+    background: linear-gradient(180deg, hsl(var(--border)) 0%, transparent 100%);
   }
   
   .kpi-card.success::before {
-    @apply bg-emerald-400;
-    box-shadow: 0 0 10px hsl(145 100% 45%);
+    background: linear-gradient(180deg, hsl(var(--success)) 0%, hsl(var(--success) / 0.3) 100%);
+    box-shadow: 0 0 15px hsl(var(--success) / 0.4);
   }
   
   .kpi-card.danger::before {
-    @apply bg-destructive;
-    box-shadow: 0 0 10px hsl(0 72% 51%);
+    background: linear-gradient(180deg, hsl(var(--destructive)) 0%, hsl(var(--destructive) / 0.3) 100%);
+    box-shadow: 0 0 15px hsl(var(--destructive) / 0.4);
+  }
+
+  .kpi-card.gold::before {
+    background: linear-gradient(180deg, hsl(var(--gold)) 0%, hsl(var(--gold) / 0.3) 100%);
+    box-shadow: 0 0 15px hsl(var(--gold) / 0.4);
+  }
+
+  .kanban-column {
+    @apply border border-border/50 rounded-2xl bg-gradient-to-b from-card/90 to-card/70 flex flex-col overflow-hidden transition-all duration-200;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .kanban-column:hover {
+    @apply border-border/70;
+  }
+
+  .kanban-header {
+    @apply flex items-center justify-between gap-2 p-4 border-b border-border/50 sticky top-0 z-[3];
+    background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--card) / 0.95) 100%);
+  }
+
+  .topbar-panel {
+    @apply flex items-center justify-between gap-4 p-4 md:p-5 border border-border/60 rounded-2xl mb-6;
+    background: linear-gradient(135deg, hsl(var(--card) / 0.9) 0%, hsl(var(--card) / 0.7) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), inset 0 1px 0 hsl(var(--border) / 0.5);
+  }
+
+  .sidebar-modern {
+    @apply flex flex-col border-r border-border/50 h-screen sticky top-0 overflow-auto p-4;
+    background: linear-gradient(180deg, hsl(var(--sidebar-background)) 0%, hsl(var(--sidebar-background) / 0.95) 100%);
+  }
+
+  .filter-panel {
+    @apply bg-gradient-to-br from-primary/[0.08] to-primary/[0.02] border border-primary/20 p-4 rounded-2xl mt-4;
+    box-shadow: inset 0 1px 0 hsl(var(--primary) / 0.1);
+  }
+
+  .mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 border-t border-border/50 p-2 flex justify-around z-50;
+    background: linear-gradient(180deg, hsl(var(--card) / 0.95) 0%, hsl(var(--card)) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .icon-button {
+    @apply p-2.5 rounded-xl bg-white/5 border border-border/60 text-foreground transition-all duration-200;
+  }
+
+  .icon-button:hover {
+    @apply bg-white/10 border-border -translate-y-0.5;
+  }
+
+  .text-button {
+    @apply px-4 py-2.5 rounded-xl text-sm font-semibold bg-white/5 border border-border/60 text-foreground transition-all duration-200;
+  }
+
+  .text-button:hover {
+    @apply bg-white/10 border-border -translate-y-0.5;
   }
 }
