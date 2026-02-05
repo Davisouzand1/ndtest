@@ -63,6 +63,12 @@ export interface CRMConfig {
   owners: string[];
 }
 
+export interface Goals {
+  daily: number;
+  weekly: number;
+  monthly: number;
+}
+
 export interface CRMState {
   leads: Lead[];
   tasks: Task[];
@@ -73,6 +79,7 @@ export interface CRMState {
   contracts: Contract[];
   pipelines: Pipeline[];
   config: CRMConfig;
+  goals: Goals;
   ui: {
     presetDays?: number;
     month?: string;

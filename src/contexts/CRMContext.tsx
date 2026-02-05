@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { CRMState, Lead, Task, FinanceItem, Contract, Pipeline, uid, todayISO } from '@/lib/crm-types';
+import { CRMState, Lead, Task, FinanceItem, Contract, Pipeline, Goals, uid, todayISO } from '@/lib/crm-types';
 import { loadState, saveState } from '@/lib/crm-store';
 
 interface Filters {
@@ -47,6 +47,9 @@ interface CRMContextType {
   addPipeline: (pipeline: Pipeline) => void;
   addStage: (pipelineId: string, stage: string) => void;
   removeStage: (pipelineId: string, stage: string) => void;
+  
+  // Goals actions
+  updateGoals: (goals: Partial<Goals>) => void;
   
   // Backup
   restoreBackup: (data: CRMState) => void;
@@ -219,6 +222,13 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     setState(data);
   }, []);
 
+  const updateGoals = useCallback((goals: Partial<Goals>) => {
+    setState(s => ({
+      ...s,
+      goals: { ...s.goals, ...goals }
+    }));
+  }, []);
+
   return (
     <CRMContext.Provider value={{
       state,
@@ -243,6 +253,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       addPipeline,
       addStage,
       removeStage,
+      updateGoals,
       restoreBackup,
     }}>
       {children}

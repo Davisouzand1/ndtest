@@ -1,6 +1,12 @@
-import { CRMState, DEFAULT_PIPELINES, DEFAULT_CONFIG, Lead, Task, FinanceItem, Contract, Pipeline, CRMConfig } from './crm-types';
+import { CRMState, DEFAULT_PIPELINES, DEFAULT_CONFIG, Lead, Task, FinanceItem, Contract, Pipeline, CRMConfig, Goals } from './crm-types';
 
 const STORAGE_KEY = "nd_crm_v6_fixed";
+
+const DEFAULT_GOALS: Goals = {
+  daily: 5000,
+  weekly: 25000,
+  monthly: 100000,
+};
 
 export function loadState(): CRMState {
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -12,6 +18,7 @@ export function loadState(): CRMState {
       contracts: [],
       pipelines: DEFAULT_PIPELINES,
       config: DEFAULT_CONFIG,
+      goals: DEFAULT_GOALS,
       ui: { presetDays: 30 }
     };
   }
@@ -28,6 +35,7 @@ export function loadState(): CRMState {
       sources: s.config?.sources || DEFAULT_CONFIG.sources,
       services: s.config?.services || DEFAULT_CONFIG.services,
     },
+    goals: s.goals || DEFAULT_GOALS,
     ui: s.ui || { presetDays: 30 }
   };
 }
