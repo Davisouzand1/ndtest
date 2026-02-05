@@ -38,7 +38,7 @@ function CRMApp() {
     <div className="flex min-h-screen w-full">
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <main className="flex-1 p-6 overflow-auto">
+      <main className="flex-1 p-3 md:p-6 overflow-auto pb-20 md:pb-6">
         <Topbar
           title={tabTitles[activeTab] || 'CRM'}
           onNewLead={openNewLead}
