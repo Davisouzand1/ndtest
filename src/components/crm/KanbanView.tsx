@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useCRM } from '@/contexts/CRMContext';
 import { Lead, fmtBRL, cleanPhone } from '@/lib/crm-types';
+import { GoalsCard } from './GoalsCard';
 
 interface KanbanViewProps {
   onEditLead: (id: string) => void;
@@ -74,6 +75,9 @@ export function KanbanView({ onEditLead }: KanbanViewProps) {
 
   return (
     <div className="animate-fade-in">
+      {/* Goals Card */}
+      <GoalsCard />
+
       {/* KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mb-4 md:mb-6">
         <div className="kpi-card gold">
