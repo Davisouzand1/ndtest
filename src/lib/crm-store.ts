@@ -1,6 +1,6 @@
-import { CRMState, DEFAULT_PIPELINES, DEFAULT_CONFIG, Lead, Task, FinanceItem, Contract, Pipeline, CRMConfig, Goals } from './crm-types';
+import { CRMState, DEFAULT_PIPELINES, DEFAULT_CONFIG, Lead, Task, FinanceItem, Contract, Pipeline, CRMConfig, Goals, Meeting } from './crm-types';
 
-const STORAGE_KEY = "nd_crm_v6_fixed";
+const STORAGE_KEY = "nd_crm_v7_agenda";
 
 const DEFAULT_GOALS: Goals = {
   daily: 5000,
@@ -19,6 +19,7 @@ export function loadState(): CRMState {
       pipelines: DEFAULT_PIPELINES,
       config: DEFAULT_CONFIG,
       goals: DEFAULT_GOALS,
+      meetings: [],
       ui: { presetDays: 30 }
     };
   }
@@ -36,6 +37,7 @@ export function loadState(): CRMState {
       services: s.config?.services || DEFAULT_CONFIG.services,
     },
     goals: s.goals || DEFAULT_GOALS,
+    meetings: s.meetings || [],
     ui: s.ui || { presetDays: 30 }
   };
 }
