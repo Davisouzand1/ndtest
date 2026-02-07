@@ -69,6 +69,15 @@ export interface Goals {
   monthly: number;
 }
 
+export interface Meeting {
+  id: string;
+  title: string;
+  date: string; // YYYY-MM-DD
+  time: string; // HH:mm
+  leadId?: string;
+  notes?: string;
+}
+
 export interface CRMState {
   leads: Lead[];
   tasks: Task[];
@@ -80,6 +89,7 @@ export interface CRMState {
   pipelines: Pipeline[];
   config: CRMConfig;
   goals: Goals;
+  meetings: Meeting[];
   ui: {
     presetDays?: number;
     month?: string;

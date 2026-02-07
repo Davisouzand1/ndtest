@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { CRMState, Lead, Task, FinanceItem, Contract, Pipeline, Goals, uid, todayISO } from '@/lib/crm-types';
+import { CRMState, Lead, Task, FinanceItem, Contract, Pipeline, Goals, Meeting, uid, todayISO } from '@/lib/crm-types';
 import { loadState, saveState } from '@/lib/crm-store';
+import { format, addDays } from 'date-fns';
 
 interface Filters {
   search: string;
@@ -51,6 +52,11 @@ interface CRMContextType {
   // Goals actions
   updateGoals: (goals: Partial<Goals>) => void;
   
+  // Meeting actions
+  addMeeting: (meeting: Omit<Meeting, 'id'>) => void;
+  updateMeeting: (id: string, meeting: Partial<Meeting>) => void;
+  deleteMeeting: (id: string) => void;
+  
   // Backup
   restoreBackup: (data: CRMState) => void;
 }
@@ -99,11 +105,40 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     setState(s => ({ ...s, leads: s.leads.filter(l => l.id !== id) }));
   }, []);
 
+  // Helper to check if stage is a scheduling stage
+  const isSchedulingStage = (stage: string) => {
+    const schedulingKeywords = ['reunião', 'agendamento', 'agendado', 'meeting', 'schedule'];
+    return schedulingKeywords.some(kw => stage.toLowerCase().includes(kw));
+  };
+
   const moveLead = useCallback((id: string, pipeline: string, stage: string) => {
-    setState(s => ({
-      ...s,
-      leads: s.leads.map(l => l.id === id ? { ...l, pipeline, stage, updatedAt: todayISO() } : l)
-    }));
+    setState(s => {
+      const lead = s.leads.find(l => l.id === id);
+      
+      // Auto-create meeting if moving to a scheduling stage
+      if (lead && isSchedulingStage(stage)) {
+        const existingMeeting = s.meetings.find(m => m.leadId === id);
+        if (!existingMeeting) {
+          const newMeeting: Meeting = {
+            id: uid(),
+            title: `Reunião - ${lead.name}`,
+            date: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
+            time: '10:00',
+            leadId: id,
+          };
+          return {
+            ...s,
+            leads: s.leads.map(l => l.id === id ? { ...l, pipeline, stage, updatedAt: todayISO() } : l),
+            meetings: [newMeeting, ...s.meetings]
+          };
+        }
+      }
+      
+      return {
+        ...s,
+        leads: s.leads.map(l => l.id === id ? { ...l, pipeline, stage, updatedAt: todayISO() } : l)
+      };
+    });
   }, []);
 
   // Task actions
@@ -229,6 +264,23 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  // Meeting actions
+  const addMeeting = useCallback((meeting: Omit<Meeting, 'id'>) => {
+    const newMeeting: Meeting = { ...meeting, id: uid() };
+    setState(s => ({ ...s, meetings: [newMeeting, ...s.meetings] }));
+  }, []);
+
+  const updateMeeting = useCallback((id: string, meeting: Partial<Meeting>) => {
+    setState(s => ({
+      ...s,
+      meetings: s.meetings.map(m => m.id === id ? { ...m, ...meeting } : m)
+    }));
+  }, []);
+
+  const deleteMeeting = useCallback((id: string) => {
+    setState(s => ({ ...s, meetings: s.meetings.filter(m => m.id !== id) }));
+  }, []);
+
   return (
     <CRMContext.Provider value={{
       state,
@@ -254,6 +306,9 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       addStage,
       removeStage,
       updateGoals,
+      addMeeting,
+      updateMeeting,
+      deleteMeeting,
       restoreBackup,
     }}>
       {children}

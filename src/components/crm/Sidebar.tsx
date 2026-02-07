@@ -8,6 +8,7 @@ interface SidebarProps {
 
 const tabs = [
   { id: 'kanban', icon: '📌', label: 'CRM', showCount: true },
+  { id: 'agenda', icon: '📅', label: 'Agenda', showMeetingCount: true },
   { id: 'tasks', icon: '✅', label: 'Tarefas' },
   { id: 'financial', icon: '💰', label: 'Financeiro' },
   { id: 'contracts', icon: '📜', label: 'Contratos' },
@@ -55,6 +56,11 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             {tab.showCount && (
               <span className="ml-auto text-[11px] text-primary border border-primary/40 px-2 py-0.5 rounded-full bg-gradient-to-r from-primary/15 to-primary/5 font-semibold">
                 {state.leads.length}
+              </span>
+            )}
+            {tab.showMeetingCount && state.meetings.length > 0 && (
+              <span className="ml-auto text-[11px] text-primary border border-primary/40 px-2 py-0.5 rounded-full bg-gradient-to-r from-primary/15 to-primary/5 font-semibold">
+                {state.meetings.length}
               </span>
             )}
           </button>
