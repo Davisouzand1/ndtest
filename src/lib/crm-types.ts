@@ -90,6 +90,7 @@ export interface CRMState {
   config: CRMConfig;
   goals: Goals;
   meetings: Meeting[];
+  logo?: string; // base64 data URL
   ui: {
     presetDays?: number;
     month?: string;

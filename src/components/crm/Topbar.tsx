@@ -10,7 +10,7 @@ interface TopbarProps {
 }
 
 export function Topbar({ title, subtitle = 'Gestão Integrada', onNewLead }: TopbarProps) {
-  const { clearFilters } = useCRM();
+  const { state, clearFilters } = useCRM();
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -19,9 +19,18 @@ export function Topbar({ title, subtitle = 'Gestão Integrada', onNewLead }: Top
 
   return (
     <div className="topbar-panel">
-      <div className="min-w-0 flex-1">
-        <h1 className="text-base md:text-xl font-bold tracking-wide bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text truncate">{title}</h1>
-        <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">{subtitle}</p>
+      <div className="min-w-0 flex-1 flex items-center gap-3">
+        {state.logo && (
+          <img 
+            src={state.logo} 
+            alt="Logo" 
+            className="h-8 md:h-10 w-auto max-w-[120px] object-contain"
+          />
+        )}
+        <div>
+          <h1 className="text-base md:text-xl font-bold tracking-wide bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text truncate">{title}</h1>
+          <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">{subtitle}</p>
+        </div>
       </div>
       <div className="flex gap-1.5 md:gap-2.5 items-center flex-shrink-0">
         {/* Mobile filters button */}

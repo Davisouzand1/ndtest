@@ -20,6 +20,7 @@ export function loadState(): CRMState {
       config: DEFAULT_CONFIG,
       goals: DEFAULT_GOALS,
       meetings: [],
+      logo: undefined,
       ui: { presetDays: 30 }
     };
   }
@@ -38,6 +39,7 @@ export function loadState(): CRMState {
     },
     goals: s.goals || DEFAULT_GOALS,
     meetings: s.meetings || [],
+    logo: s.logo,
     ui: s.ui || { presetDays: 30 }
   };
 }

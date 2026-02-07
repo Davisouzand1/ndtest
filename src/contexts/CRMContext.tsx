@@ -57,6 +57,9 @@ interface CRMContextType {
   updateMeeting: (id: string, meeting: Partial<Meeting>) => void;
   deleteMeeting: (id: string) => void;
   
+  // Logo actions
+  updateLogo: (logo: string | undefined) => void;
+  
   // Backup
   restoreBackup: (data: CRMState) => void;
 }
@@ -281,6 +284,10 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     setState(s => ({ ...s, meetings: s.meetings.filter(m => m.id !== id) }));
   }, []);
 
+  const updateLogo = useCallback((logo: string | undefined) => {
+    setState(s => ({ ...s, logo }));
+  }, []);
+
   return (
     <CRMContext.Provider value={{
       state,
@@ -309,6 +316,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       addMeeting,
       updateMeeting,
       deleteMeeting,
+      updateLogo,
       restoreBackup,
     }}>
       {children}
