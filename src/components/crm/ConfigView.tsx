@@ -3,15 +3,17 @@ import { useCRM } from '@/contexts/CRMContext';
 import { downloadBackup, uploadBackup } from '@/lib/crm-store';
 import { uid } from '@/lib/crm-types';
 import { toast } from 'sonner';
+import { Upload, Trash2, Image } from 'lucide-react';
 
 export function ConfigView() {
-  const { state, addConfigItem, removeConfigItem, addPipeline, addStage, removeStage, restoreBackup } = useCRM();
+  const { state, addConfigItem, removeConfigItem, addPipeline, addStage, removeStage, restoreBackup, updateLogo } = useCRM();
   const [selectedPipeline, setSelectedPipeline] = useState(state.pipelines[0]?.id || '');
   const [newStage, setNewStage] = useState('');
   const [newOwner, setNewOwner] = useState('');
   const [newSource, setNewSource] = useState('');
   const [newService, setNewService] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const logoInputRef = useRef<HTMLInputElement>(null);
 
   const currentPipeline = state.pipelines.find(p => p.id === selectedPipeline);
 
@@ -31,6 +33,39 @@ export function ConfigView() {
     } catch (error) {
       toast.error('Erro ao restaurar backup');
     }
+  };
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Por favor, selecione uma imagem');
+      return;
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Imagem muito grande. Máximo 2MB');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      updateLogo(dataUrl);
+      toast.success('Logo atualizada com sucesso!');
+    };
+    reader.onerror = () => {
+      toast.error('Erro ao carregar imagem');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveLogo = () => {
+    updateLogo(undefined);
+    toast.success('Logo removida');
   };
 
   const handleAddPipeline = () => {
@@ -61,6 +96,50 @@ export function ConfigView() {
       <div className="bg-card border border-border rounded-[22px] panel-shadow p-5">
         <h2 className="text-base font-medium mb-5">Configurações Gerais</h2>
 
+        {/* Logo Upload */}
+        <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-5">
+          <h3 className="text-sm font-medium text-primary mb-3 flex items-center gap-2">
+            <Image className="w-4 h-4" />
+            Logo da Empresa
+          </h3>
+          <div className="flex items-center gap-4">
+            {state.logo ? (
+              <div className="relative group">
+                <img 
+                  src={state.logo} 
+                  alt="Logo" 
+                  className="h-16 w-auto max-w-[200px] object-contain rounded-lg border border-border bg-white/5 p-2"
+                />
+                <button
+                  onClick={handleRemoveLogo}
+                  className="absolute -top-2 -right-2 p-1.5 rounded-full bg-destructive text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Remover logo"
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              </div>
+            ) : (
+              <div className="h-16 w-32 rounded-lg border-2 border-dashed border-border flex items-center justify-center text-muted-foreground text-xs">
+                Sem logo
+              </div>
+            )}
+            <div className="relative overflow-hidden">
+              <button className="flex items-center gap-2 px-4 py-2.5 rounded-[10px] text-sm font-semibold bg-white/5 border border-border text-foreground hover:bg-white/10">
+                <Upload className="w-4 h-4" />
+                {state.logo ? 'Trocar Logo' : 'Enviar Logo'}
+              </button>
+              <input
+                ref={logoInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleLogoUpload}
+                className="absolute inset-0 opacity-0 cursor-pointer"
+              />
+            </div>
+          </div>
+          <p className="text-[10px] text-muted-foreground mt-2">Formatos: PNG, JPG, SVG. Máximo 2MB.</p>
+        </div>
+
         {/* Backup */}
         <div className="bg-success/5 border border-success/30 rounded-xl p-4 mb-5">
           <h3 className="text-sm font-medium text-success mb-3">💾 Backup Completo (Dados + Financeiro)</h3>
@@ -84,8 +163,22 @@ export function ConfigView() {
         </div>
 
         {/* Funis */}
-        <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-5">
-          <h3 className="text-sm font-medium text-primary mb-3">📂 Gerenciar Funis</h3>
+        <div className="bg-secondary/30 border border-border rounded-xl p-4 mb-5">
+          <h3 className="text-sm font-medium mb-3">📂 Gerenciar Funis</h3>
+          <div className="flex gap-3 mb-3">
+            <select
+              className="input-crm flex-1"
+              value={selectedPipeline}
+              onChange={e => setSelectedPipeline(e.target.value)}
+            >
+              {state.pipelines.map(p => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+            <button onClick={handleAddPipeline} className="px-4 py-2 rounded-lg bg-white/5 border border-border text-sm font-medium hover:bg-white/10">
+              + Novo Funil
+            </button>
+          </div>
           <div className="flex gap-3 mb-3">
             <select
               className="input-crm flex-1"
