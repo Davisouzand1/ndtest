@@ -8,6 +8,7 @@ interface SidebarProps {
 
 const tabs = [
   { id: 'kanban', icon: '📌', label: 'CRM', showCount: true },
+  { id: 'goals', icon: '🎯', label: 'Metas' },
   { id: 'agenda', icon: '📅', label: 'Agenda', showMeetingCount: true },
   { id: 'tasks', icon: '✅', label: 'Tarefas' },
   { id: 'financial', icon: '💰', label: 'Financeiro' },

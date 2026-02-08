@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useCRM } from '@/contexts/CRMContext';
 import { Lead, fmtBRL, cleanPhone } from '@/lib/crm-types';
-import { GoalsCard } from './GoalsCard';
 
 interface KanbanViewProps {
   onEditLead: (id: string) => void;
@@ -75,8 +74,6 @@ export function KanbanView({ onEditLead }: KanbanViewProps) {
 
   return (
     <div className="animate-fade-in">
-      {/* Goals Card */}
-      <GoalsCard />
 
       {/* KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mb-4 md:mb-6">
@@ -189,12 +186,17 @@ interface LeadCardProps {
 function LeadCard({ lead, onDragStart, onClick }: LeadCardProps) {
   const waLink = lead.contact && cleanPhone(lead.contact) ? `https://wa.me/${cleanPhone(lead.contact)}` : null;
 
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onClick();
+  };
+
   return (
     <div
-      className="crm-card group p-2.5 md:p-3.5"
+      className="crm-card group p-2.5 md:p-3.5 cursor-pointer"
       draggable
       onDragStart={e => onDragStart(e, lead.id)}
-      onClick={onClick}
+      onDoubleClick={handleDoubleClick}
     >
       <div className="flex justify-between items-start gap-2">
         <strong className="text-xs md:text-sm font-semibold group-hover:text-primary transition-colors line-clamp-1">{lead.name}</strong>

@@ -3,6 +3,7 @@ import { CRMProvider } from '@/contexts/CRMContext';
 import { Sidebar } from '@/components/crm/Sidebar';
 import { Topbar } from '@/components/crm/Topbar';
 import { KanbanView } from '@/components/crm/KanbanView';
+import { GoalsView } from '@/components/crm/GoalsView';
 import { AgendaView } from '@/components/crm/AgendaView';
 import { TasksView } from '@/components/crm/TasksView';
 import { FinancialView } from '@/components/crm/FinancialView';
@@ -13,6 +14,7 @@ import { LeadModal } from '@/components/crm/LeadModal';
 
 const tabTitles: Record<string, string> = {
   kanban: 'CRM • Funis de Agência',
+  goals: 'Metas de Vendas',
   agenda: 'Agenda de Reuniões',
   tasks: 'Gerenciador de Tarefas',
   financial: 'Gestão Financeira',
@@ -48,6 +50,7 @@ function CRMApp() {
 
         <div className="animate-fade-in">
           {activeTab === 'kanban' && <KanbanView onEditLead={openEditLead} />}
+          {activeTab === 'goals' && <GoalsView />}
           {activeTab === 'agenda' && <AgendaView />}
           {activeTab === 'tasks' && <TasksView />}
           {activeTab === 'financial' && <FinancialView />}
@@ -63,10 +66,10 @@ function CRMApp() {
         />
       </main>
 
-      {/* Mobile Nav */}
       <nav className="mobile-nav md:hidden">
         {[
           { id: 'kanban', icon: '📌' },
+          { id: 'goals', icon: '🎯' },
           { id: 'agenda', icon: '📅' },
           { id: 'tasks', icon: '✅' },
           { id: 'financial', icon: '💰' },
