@@ -1,7 +1,7 @@
 import { useCRM } from '@/contexts/CRMContext';
 import { useTheme } from 'next-themes';
 import { Sun, Moon, Plus } from 'lucide-react';
-import { MobileFilters } from './MobileFilters';
+import { FiltersPopover } from './FiltersPopover';
 
 interface TopbarProps {
   title: string;
@@ -10,7 +10,7 @@ interface TopbarProps {
 }
 
 export function Topbar({ title, subtitle = 'Gestão Integrada', onNewLead }: TopbarProps) {
-  const { state, clearFilters } = useCRM();
+  const { state } = useCRM();
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -33,10 +33,7 @@ export function Topbar({ title, subtitle = 'Gestão Integrada', onNewLead }: Top
         </div>
       </div>
       <div className="flex gap-1.5 md:gap-2.5 items-center flex-shrink-0">
-        {/* Mobile filters button */}
-        <div className="md:hidden">
-          <MobileFilters />
-        </div>
+        <FiltersPopover />
         
         <button
           onClick={toggleTheme}
@@ -44,12 +41,6 @@ export function Topbar({ title, subtitle = 'Gestão Integrada', onNewLead }: Top
           title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
         >
           {theme === 'dark' ? <Sun className="w-4 h-4 md:w-5 md:h-5" /> : <Moon className="w-4 h-4 md:w-5 md:h-5" />}
-        </button>
-        <button
-          onClick={clearFilters}
-          className="text-button hidden sm:block"
-        >
-          Limpar filtros
         </button>
         <button onClick={onNewLead} className="btn-gold flex items-center gap-1 md:gap-2 text-sm md:text-base px-3 md:px-5 py-2 md:py-2.5">
           <Plus className="w-4 h-4 md:hidden" />
